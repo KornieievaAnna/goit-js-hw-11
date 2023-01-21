@@ -39,7 +39,7 @@ const gallerySimpleLightbox = new SimpleLightbox('.gallery a', {
 //     2.1.попытка получить данные успешна: создаем маркап
 //     2.2. попытка неуспешна error
 
-//     3. создание марка как в 10
+//     3. создание марка как в 10 дз
 
 // 1)
 function onSearch(evt) {
@@ -172,6 +172,7 @@ async function pixabayAPI(name, pages) {
   }
 }
 
+// 3) создание марка как в 10 дз
 function createMarkup(images) {
   // основа из 10й дз
   console.log(images);
