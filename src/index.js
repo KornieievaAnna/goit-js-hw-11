@@ -115,7 +115,7 @@ function onSearch(evt) {
 async function pixabayAPI(name, pages) {
   // базовый урл
   const BASE_URL = 'https://pixabay.com/api/';
-  // параметри урла из конспекта ключь после регистрации page присваеваем параметр "количество ключей по умолчанию"
+  // параметри урла из конспекта ключь после регистрации page присваеваем параметр "количество ключей по умолчанию"; q присваиваем константу name, которую достали из импута, то что вводил юзер
   const options = {
     params: {
       key: '32996864-5f1a960915a219f7f2c6f1a79',
@@ -131,10 +131,19 @@ async function pixabayAPI(name, pages) {
   try {
     // получаем данные з апи по урлу и параметрам
     const response = await axios.get(BASE_URL, options);
-    console.log(response);
-    console.log(response.data.hits.length);
+    // из документации axios https://github.com/axios/axios, чтобы не искали долго:
+    // Optionally the request above could also be done as
+    // axios.get('/user', {
+    //   params: {
+    //     ID: 12345,
+    //   },
+    // });
+    // т.е. вместо fetch ставим axios.get(BASE_URL, options)
+
+    console.log(response); //проверка
+    console.log(response.data.hits.length); //проверка
     isVisible += response.data.hits.length;
-    // сколько элементов найдено по запросу
+    // сколько элементов найдено по запросу отображается
     console.log(isVisible);
     if (!response.data.hits.length) {
       Notiflix.Notify.failure(
@@ -164,9 +173,14 @@ async function pixabayAPI(name, pages) {
 }
 
 function createMarkup(images) {
+  // основа из 10й дз
   console.log(images);
   const markup = images.hits
     .map(
+      // image.largeImageURL - картинка которая отображается при клике
+      //image.webformatURL - картинка которая отображается при поиске
+      // это все лежит в обекте который передается нам из апи, точнее в hits -- открываем любой и смотрим его свойства
+
       image =>
         `<a class="photo-link" href="${image.largeImageURL}">
             <div class="photo-card">
@@ -196,7 +210,7 @@ function createMarkup(images) {
     )
     .join('');
   refs.gallery.insertAdjacentHTML('beforeend', markup);
-  gallerySimpleLightbox.refresh();
+  gallerySimpleLightbox.refresh(); //из дз: "У библиотеки есть метод refresh() который обязательно нужно вызывать каждый раз после добавления новой группы карточек изображений.""
 }
 
 refs.loadMore.addEventListener('click', onLoadMore);
@@ -204,7 +218,7 @@ refs.loadMore.addEventListener('click', onLoadMore);
 function onLoadMore() {
   //количество страниц по умолчанию увеличивается на единицу += 1
   pages += 1;
-  //достаем введенное имя из импута
+  //достаем введенное имя из импута, его просто нет в глобальной видимости (надо поставить и поменять везде!!!)
   const name = refs.form.querySelector('input').value.trim();
   //вызываем функцию запроса апи и в параментри передаем имя из импута и количество страниц новое (+= 1)
   pixabayAPI(name, pages);
