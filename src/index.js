@@ -58,7 +58,7 @@ function onSearch(evt) {
   } else {
     // если пусто то скрываем кнопку "load" и выводим сообщение
     refs.loadMore.style.display = 'none';
-    return Notify.failure(
+    return Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
   }
